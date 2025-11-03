@@ -1,0 +1,3 @@
+Luis Estrada|estrada@gmail.com|12345678
+Kellis Oviedo|oviedo@gmail.com|12345678
+Jireth Talaigua|talaigua@gmail.com|7654321
