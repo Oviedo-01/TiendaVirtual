@@ -110,54 +110,92 @@ public class SubPanelCatalogo extends javax.swing.JPanel {
         panel.setLayout(new java.awt.BorderLayout());
         panel.setPreferredSize(new java.awt.Dimension(180, 170));
         panel.setBackground(java.awt.Color.WHITE);
-        
-        // Etiqueta para mostrar imagen (emoji como placeholder)
+    
+        // Etiqueta para mostrar imagen
         javax.swing.JLabel lblImagen = new javax.swing.JLabel();
         lblImagen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblImagen.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 60));
-        
-        // Asignar emoji según categoría
-        String emoji = obtenerEmojiPorCategoria(producto.getCategoria());
-        lblImagen.setText(emoji);
         lblImagen.setOpaque(true);
         lblImagen.setBackground(new java.awt.Color(240, 240, 250));
         lblImagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200), 1));
         lblImagen.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+    
+       // ✅ CARGAR IMAGEN REAL (en lugar de emoji)
+        try {
+            String rutaImagen = producto.getImagenActual();
+            java.io.File archivoImagen = new java.io.File(rutaImagen);
         
+            if (archivoImagen.exists()) {
+                javax.swing.ImageIcon iconoOriginal = new javax.swing.ImageIcon(rutaImagen);
+            
+            // Escalar imagen para que quepa en el panel
+                java.awt.Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(
+                    170, 160, java.awt.Image.SCALE_SMOOTH
+                );
+                lblImagen.setIcon(new javax.swing.ImageIcon(imagenEscalada));
+            } else {
+                // Si no existe la imagen, mostrar emoji por defecto
+                lblImagen.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 60));
+                lblImagen.setText(obtenerEmojiPorCategoria(producto.getCategoria()));
+            }
+        } catch (Exception e) {
+            // Si hay error, mostrar emoji por defecto
+            lblImagen.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 60));
+            lblImagen.setText(obtenerEmojiPorCategoria(producto.getCategoria()));
+        }
+    
         // Click en imagen para ver detalles
         lblImagen.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 mostrarDetallesProducto(producto);
             }
         });
-        
+    
         panel.add(lblImagen, java.awt.BorderLayout.CENTER);
-        
+    
         // Botones de navegación de imágenes (si tiene múltiples)
         if (producto.getListaImagenes().getTamaño() > 1) {
             javax.swing.JPanel panelNavegacion = new javax.swing.JPanel(new java.awt.FlowLayout());
             panelNavegacion.setBackground(java.awt.Color.WHITE);
-            
+        
             javax.swing.JButton btnAnterior = new javax.swing.JButton("◄");
             btnAnterior.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 10));
             btnAnterior.addActionListener(e -> {
-                producto.anteriorImagen();
-                lblImagen.setText(obtenerEmojiPorCategoria(producto.getCategoria()));
+              producto.anteriorImagen();
+              actualizarImagen(lblImagen, producto);
             });
-            
+        
             javax.swing.JButton btnSiguiente = new javax.swing.JButton("►");
             btnSiguiente.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 10));
             btnSiguiente.addActionListener(e -> {
                 producto.siguienteImagen();
-                lblImagen.setText(obtenerEmojiPorCategoria(producto.getCategoria()));
+                actualizarImagen(lblImagen, producto);
             });
-            
+        
             panelNavegacion.add(btnAnterior);
             panelNavegacion.add(btnSiguiente);
             panel.add(panelNavegacion, java.awt.BorderLayout.SOUTH);
         }
-        
+    
         return panel;
+    }
+
+    // MÉTODO: Actualizar imagen cuando cambia con las flechas
+    private void actualizarImagen(javax.swing.JLabel lblImagen, modelo.entidades.Producto producto) {
+        try {
+            String rutaImagen = producto.getImagenActual();
+            java.io.File archivoImagen = new java.io.File(rutaImagen);
+        
+            if (archivoImagen.exists()) {
+                javax.swing.ImageIcon iconoOriginal = new javax.swing.ImageIcon(rutaImagen);
+                java.awt.Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(
+                    170, 160, java.awt.Image.SCALE_SMOOTH
+                );
+                lblImagen.setIcon(new javax.swing.ImageIcon(imagenEscalada));
+                lblImagen.setText(""); // Quitar texto si había emoji
+            }
+        } catch (Exception e) {
+            System.out.println("Error al cargar imagen: " + e.getMessage());
+        }
     }
     
     private javax.swing.JPanel crearPanelInfo(modelo.entidades.Producto producto) {
@@ -301,12 +339,30 @@ public class SubPanelCatalogo extends javax.swing.JPanel {
         // Imagen grande
         javax.swing.JLabel lblImagenGrande = new javax.swing.JLabel();
         lblImagenGrande.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblImagenGrande.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 100));
-        lblImagenGrande.setText(obtenerEmojiPorCategoria(producto.getCategoria()));
         lblImagenGrande.setOpaque(true);
         lblImagenGrande.setBackground(new java.awt.Color(240, 240, 250));
         lblImagenGrande.setPreferredSize(new java.awt.Dimension(200, 200));
         lblImagenGrande.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200), 2));
+        
+        // ✅ CARGAR IMAGEN REAL
+        try {
+            String rutaImagen = producto.getImagenActual();
+            java.io.File archivoImagen = new java.io.File(rutaImagen);
+    
+            if (archivoImagen.exists()) {
+                javax.swing.ImageIcon iconoOriginal = new javax.swing.ImageIcon(rutaImagen);
+                java.awt.Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(
+                    190, 190, java.awt.Image.SCALE_SMOOTH
+                );
+                lblImagenGrande.setIcon(new javax.swing.ImageIcon(imagenEscalada));
+            } else {
+                lblImagenGrande.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 100));
+                lblImagenGrande.setText(obtenerEmojiPorCategoria(producto.getCategoria()));
+            }
+        } catch (Exception e) {
+            lblImagenGrande.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 100));
+            lblImagenGrande.setText(obtenerEmojiPorCategoria(producto.getCategoria()));
+        }
         
         // Información detallada
         javax.swing.JPanel panelInfo = new javax.swing.JPanel();

@@ -133,52 +133,50 @@ public class PanelTienda extends javax.swing.JPanel {
     }
     
     private void mostrarCatalogo() {
-        javax.swing.JLabel lblTemp = new javax.swing.JLabel("Catálogo de Productos");
-        lblTemp.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 24));
-        lblTemp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        
-        javax.swing.JPanel panelTemp = new javax.swing.JPanel();
-        panelTemp.setLayout(new java.awt.BorderLayout());
-        panelTemp.add(lblTemp, java.awt.BorderLayout.CENTER);
-        
-        mostrarSubPanel(panelTemp);
+    // ✅ USAR SubPanelCatalogo en lugar del panel temporal
+        SubPanelCatalogo subPanelCatalogo = new SubPanelCatalogo(
+            this, 
+            productoManager, 
+            carritoManager, 
+            deseosManager
+        );
+        mostrarSubPanel(subPanelCatalogo);
     }
     
     private void mostrarCarrito() {
-        javax.swing.JLabel lblTemp = new javax.swing.JLabel("Mi Carrito de Compras");
-        lblTemp.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 24));
-        lblTemp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        
-        javax.swing.JPanel panelTemp = new javax.swing.JPanel();
-        panelTemp.setLayout(new java.awt.BorderLayout());
-        panelTemp.add(lblTemp, java.awt.BorderLayout.CENTER);
-        
-        mostrarSubPanel(panelTemp);
+        SubPanelCarrito subPanelCarrito = new SubPanelCarrito(
+            this,
+            carritoManager,
+            productoManager
+        );
+        mostrarSubPanel(subPanelCarrito);
     }
     
     private void mostrarDeseos() {
-        javax.swing.JLabel lblTemp = new javax.swing.JLabel("Mi Lista de Deseos");
-        lblTemp.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 24));
-        lblTemp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        
-        javax.swing.JPanel panelTemp = new javax.swing.JPanel();
-        panelTemp.setLayout(new java.awt.BorderLayout());
-        panelTemp.add(lblTemp, java.awt.BorderLayout.CENTER);
-        
-        mostrarSubPanel(panelTemp);
+        SubPanelDeseos subPanelDeseos = new SubPanelDeseos(
+            this,
+            deseosManager,
+            carritoManager,
+            productoManager
+        );
+        mostrarSubPanel(subPanelDeseos);
+    }
+
+    
+    public void mostrarHistorial() {
+        SubPanelHistorial subPanelHistorial = new SubPanelHistorial(
+            this,
+            historialManager
+        );
+        mostrarSubPanel(subPanelHistorial);
     }
     
-    private void mostrarHistorial() {
-        javax.swing.JLabel lblTemp = new javax.swing.JLabel("Mi Historial de Compras");
-        lblTemp.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 24));
-        lblTemp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        
-        javax.swing.JPanel panelTemp = new javax.swing.JPanel();
-        panelTemp.setLayout(new java.awt.BorderLayout());
-        panelTemp.add(lblTemp, java.awt.BorderLayout.CENTER);
-        
-        mostrarSubPanel(panelTemp);
+    // ========== MÉTODO PARA REGISTRAR COMPRA EN HISTORIAL ==========
+
+    public void registrarCompraEnHistorial(java.util.List<modelo.entidades.ItemCarrito> items, double total) {
+        historialManager.agregarCompra(items, total);
     }
+
     private void btnCatalogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCatalogoActionPerformed
         mostrarCatalogo();
     }//GEN-LAST:event_btnCatalogoActionPerformed

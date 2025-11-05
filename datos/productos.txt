@@ -1,1 +1,9 @@
-
+1|Smartphone Galaxy|299.99|Teléfono inteligente con pantalla AMOLED 15 pulgadas|6|Tecnologia|imagenes/smartphone1.jpg;imagenes/smartphone2.jpg
+2|Laptop Premium|899.99|Laptop ultradelgada con SSD 512GB|5|Tecnologia|imagenes/laptop1.jpg;imagenes/laptop2.jpg
+3|Smartwatch Pro|199.99|Reloj inteligente con monitoreo de salud|16|Tecnologia|imagenes/smartwatch1.jpg
+4|Auriculares Bluetooth|149.99|Auriculares con cancelación de ruido|25|Tecnologia|imagenes/auriculares1.jpg
+5|Cámara Digital 4K|599.99|Cámara profesional con grabación 4K|10|Tecnologia|imagenes/camara1.jpg;imagenes/camara2.jpg;imagenes/camara3.jpg
+6|Monitor 4K 27 pulgadas|399.99|Monitor para gaming y diseño|10|Tecnologia|imagenes/monitor1.jpg
+7|Cafetera Automática|89.99|Cafetera programable con molinillo|18|Hogar|imagenes/cafetera1.jpg
+8|Aspiradora Robot|249.99|Robot aspirador inteligente|13|Hogar|imagenes/aspiradora1.jpg
+9|Zapatos Air|100.0|Zapatos originales de la marca Nike|0|Ropa|imagenes/prueba_01.jpg;imagenes/prueba_03.jpg

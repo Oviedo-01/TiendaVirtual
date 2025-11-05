@@ -7,6 +7,8 @@ package modelo.gestores;
 import modelo.entidades.Producto;
 import modelo.estructuras.PilaDeseos;
 import java.util.List;
+import javax.swing.JOptionPane;
+
 
 /**
  * Gestor para operaciones de la lista de deseos
@@ -29,8 +31,29 @@ public class DeseosManager {
     
     // Agregar producto a deseos (push)
     public void agregarADeseos(Producto producto) {
+        // Verificar si el producto ya está en la lista de deseos
+        for (Producto p : deseos.obtenerTodos()) {
+            if (p.getId() == producto.getId()) {
+                JOptionPane.showMessageDialog(
+                    null,
+                    "El producto \"" + producto.getNombre() + "\" ya está en tu lista de deseos.",
+                    "Producto duplicado",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+                return; // No lo agrega
+            }
+        }
+
+        // Si no está, agregarlo normalmente
         deseos.push(producto);
         guardarDeseosEnArchivo();
+
+        JOptionPane.showMessageDialog(
+            null,
+            "El producto \"" + producto.getNombre() + "\" se agregó a tu lista de deseos.",
+            "Producto agregado",
+            JOptionPane.INFORMATION_MESSAGE
+        );
     }
     
     // Eliminar producto específico de deseos

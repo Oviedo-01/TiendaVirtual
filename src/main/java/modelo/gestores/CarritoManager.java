@@ -81,7 +81,7 @@ public class CarritoManager {
     }
     
     // Guardar carrito en archivo
-    private void guardarCarritoEnArchivo() {
+    public void guardarCarritoEnArchivo() {
         List<String> lineas = new java.util.ArrayList<>();
         for (ItemCarrito item : carrito.obtenerTodos()) {
             lineas.add(item.toString());
