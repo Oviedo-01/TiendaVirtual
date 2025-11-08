@@ -20,17 +20,18 @@ public class UsuarioManager {
     public UsuarioManager() {
         this.usuarios = new ListaUsuarios();
         cargarUsuariosDeArchivo();
+        crearAdministradorPredefinido();
     }
     
-    // Registrar nuevo usuario
+    // Registrar nuevo usuario (siempre con rol "usuario")
     public boolean registrarUsuario(String nombre, String email, String contraseña) {
         // Validar que el email no esté registrado
         if (usuarios.existeUsuario(email)) {
             return false;
         }
         
-        // Crear usuario
-        Usuario nuevoUsuario = new Usuario(nombre, email, contraseña);
+        // Crear usuario con rol "usuario"
+        Usuario nuevoUsuario = new Usuario(nombre, email, contraseña, "usuario");
         usuarios.agregarUsuario(nuevoUsuario);
         
         // Guardar en archivo
@@ -62,6 +63,11 @@ public class UsuarioManager {
         return usuarios.existeUsuario(email);
     }
     
+    // Obtener todos los usuarios (para panel de admin)
+    public List<Usuario> obtenerTodosUsuarios() {
+        return usuarios.obtenerTodos();
+    }
+    
     // Cargar usuarios desde archivo
     private void cargarUsuariosDeArchivo() {
         // Si el archivo no existe, crearlo
@@ -86,5 +92,25 @@ public class UsuarioManager {
             lineas.add(usuario.toString());
         }
         GestorArchivos.escribirArchivo(ARCHIVO_USUARIOS, lineas);
+    }
+    
+    // Crear administrador predefinido si no existe
+    private void crearAdministradorPredefinido() {
+        String emailAdmin = "admin@tienda.com";
+        
+        // Verificar si el admin ya existe
+        if (!usuarios.existeUsuario(emailAdmin)) {
+            // Crear usuario administrador
+            Usuario admin = new Usuario("Admin", emailAdmin, "admin123", "admin");
+            usuarios.agregarUsuario(admin);
+            guardarUsuariosEnArchivo();
+            
+            // Crear carpeta del admin (aunque no la usará para comprar)
+            String carpetaAdmin = "datos/usuarios/Admin";
+            GestorArchivos.crearDirectorio(carpetaAdmin);
+            GestorArchivos.crearArchivo(carpetaAdmin + "/carrito.txt");
+            GestorArchivos.crearArchivo(carpetaAdmin + "/deseos.txt");
+            GestorArchivos.crearArchivo(carpetaAdmin + "/historial.txt");
+        }
     }
 }

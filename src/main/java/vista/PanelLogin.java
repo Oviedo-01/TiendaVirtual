@@ -92,22 +92,31 @@ public class PanelLogin extends javax.swing.JPanel {
 
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
         String email = txtEmail.getText().trim();
-        String password = new String(txtPassword.getPassword());
-    
+    String password = new String(txtPassword.getPassword());
+
     // Validar que no estén vacíos
-        if (email.isEmpty() || password.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                "Por favor, complete todos los campos", 
-                "Campos vacíos", 
-                javax.swing.JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        modelo.entidades.Usuario usuario = ventanaPrincipal.getUsuarioManager().login(email, password);
+    if (email.isEmpty() || password.isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this, 
+            "Por favor, complete todos los campos", 
+            "Campos vacíos", 
+            javax.swing.JOptionPane.WARNING_MESSAGE);
+        return;
+    }
     
+    modelo.entidades.Usuario usuario = ventanaPrincipal.getUsuarioManager().login(email, password);
+
     if (usuario != null) {
         // Login exitoso
         ventanaPrincipal.setUsuarioActual(usuario);
-        ventanaPrincipal.mostrarPanelTienda();
+        
+        // Verificar el rol del usuario
+        if (usuario.esAdministrador()) {
+            // Si es admin, ir al panel de administrador
+            ventanaPrincipal.mostrarPanelAdmin();
+        } else {
+            // Si es usuario normal, ir a la tienda
+            ventanaPrincipal.mostrarPanelTienda();
+        }
     } else {
         // Login fallido
         javax.swing.JOptionPane.showMessageDialog(this, 

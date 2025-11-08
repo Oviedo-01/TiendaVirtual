@@ -1,1 +1,2 @@
-Luis Estrada|estrada@gmail.com|12345
+Luis Estrada|estrada@gmail.com|12345|usuario
+Admin|admin@tienda.com|admin123|admin
