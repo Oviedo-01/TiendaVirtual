@@ -103,17 +103,12 @@ public class SubPanelDeseos extends javax.swing.JPanel {
             lblVacio.setForeground(new java.awt.Color(150, 150, 150));
             lblVacio.setAlignmentX(javax.swing.JComponent.CENTER_ALIGNMENT);
             
-            javax.swing.JLabel lblEmoji = new javax.swing.JLabel("❤️");
-            lblEmoji.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 80));
-            lblEmoji.setAlignmentX(javax.swing.JComponent.CENTER_ALIGNMENT);
-            
             javax.swing.JLabel lblMensaje = new javax.swing.JLabel("Agrega productos desde el catálogo");
             lblMensaje.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 14));
             lblMensaje.setForeground(new java.awt.Color(120, 120, 120));
             lblMensaje.setAlignmentX(javax.swing.JComponent.CENTER_ALIGNMENT);
             
             panelDeseos.add(javax.swing.Box.createVerticalGlue());
-            panelDeseos.add(lblEmoji);
             panelDeseos.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 20)));
             panelDeseos.add(lblVacio);
             panelDeseos.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 10)));
@@ -257,7 +252,7 @@ public class SubPanelDeseos extends javax.swing.JPanel {
         panel.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         // Botón Agregar al Carrito
-        javax.swing.JButton btnAgregarCarrito = new javax.swing.JButton("🛒 Al Carrito");
+        javax.swing.JButton btnAgregarCarrito = new javax.swing.JButton("Al Carrito");
         btnAgregarCarrito.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 12));
         btnAgregarCarrito.setBackground(new java.awt.Color(102, 126, 234));
         btnAgregarCarrito.setForeground(java.awt.Color.WHITE);
@@ -274,7 +269,7 @@ public class SubPanelDeseos extends javax.swing.JPanel {
         }
         
         // Botón Eliminar de Deseos
-        javax.swing.JButton btnEliminar = new javax.swing.JButton("❌ Quitar");
+        javax.swing.JButton btnEliminar = new javax.swing.JButton("Quitar");
         btnEliminar.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 12));
         btnEliminar.setBackground(new java.awt.Color(220, 53, 69));
         btnEliminar.setForeground(java.awt.Color.WHITE);
@@ -304,29 +299,41 @@ public class SubPanelDeseos extends javax.swing.JPanel {
             );
             return;
         }
-        
+    
+        // Verificar si el producto ya está en el carrito
+        if (carritoManager.productoExisteEnCarrito(producto.getId())) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Este producto ya está en tu carrito",
+                "Aviso",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE
+            );
+            return;
+        }
+    
         // Agregar al carrito
         carritoManager.agregarAlCarrito(producto, 1);
-        
-        // Preguntar si quiere eliminar de deseos
-        int eliminar = javax.swing.JOptionPane.showConfirmDialog(
-            this,
-            "Producto agregado al carrito.\n¿Deseas quitarlo de tu lista de deseos?",
-            "¿Quitar de deseos?",
-            javax.swing.JOptionPane.YES_NO_OPTION
-        );
-        
-        if (eliminar == javax.swing.JOptionPane.YES_OPTION) {
-            deseosManager.eliminarDeDeseos(producto.getId());
-            cargarDeseos(); // Recargar vista
-        }
-        
+    
+        // Mostrar notificación de éxito
         javax.swing.JOptionPane.showMessageDialog(
             this,
             producto.getNombre() + " agregado al carrito",
             "Éxito",
             javax.swing.JOptionPane.INFORMATION_MESSAGE
         );
+    
+        // Preguntar si quiere eliminar de deseos
+        int eliminar = javax.swing.JOptionPane.showConfirmDialog(
+            this,
+            "¿Deseas quitar este producto de tu lista de deseos?",
+            "Quitar de deseos",
+            javax.swing.JOptionPane.YES_NO_OPTION
+        );
+    
+        if (eliminar == javax.swing.JOptionPane.YES_OPTION) {
+            deseosManager.eliminarDeDeseos(producto.getId());
+            cargarDeseos(); // Recargar vista
+        }
     }
     
     private void eliminarDeDeseos(modelo.entidades.Producto producto) {
@@ -388,20 +395,6 @@ public class SubPanelDeseos extends javax.swing.JPanel {
     // ========== MÉTODO AUXILIAR ==========
     
     private String obtenerEmojiPorCategoria(String categoria) {
-        switch (categoria.toLowerCase()) {
-            case "tecnologia":
-            case "tecnología":
-                return "📱";
-            case "hogar":
-                return "🏠";
-            case "ropa":
-                return "👕";
-            case "alimentos":
-                return "🍔";
-            case "deportes":
-                return "⚽";
-            default:
-                return "📦";
-        }
+        return "Sin imagen disponible";
     }
 }

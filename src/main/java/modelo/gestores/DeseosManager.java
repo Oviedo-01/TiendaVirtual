@@ -29,33 +29,16 @@ public class DeseosManager {
         cargarDeseosDeArchivo();
     }
     
-    // Agregar producto a deseos (push)
-    public void agregarADeseos(Producto producto) {
-        // Verificar si el producto ya está en la lista de deseos
-        for (Producto p : deseos.obtenerTodos()) {
-            if (p.getId() == producto.getId()) {
-                JOptionPane.showMessageDialog(
-                    null,
-                    "El producto \"" + producto.getNombre() + "\" ya está en tu lista de deseos.",
-                    "Producto duplicado",
-                    JOptionPane.INFORMATION_MESSAGE
-                );
-                return; // No lo agrega
-            }
+   // Agregar producto a deseos (push)
+    public boolean agregarADeseos(Producto producto) {
+    
+        if (deseos.existe(producto.getId())) {
+            return false; // Ya existe, no se agregó
         }
-
-        // Si no está, agregarlo normalmente
         deseos.push(producto);
         guardarDeseosEnArchivo();
-
-        JOptionPane.showMessageDialog(
-            null,
-            "El producto \"" + producto.getNombre() + "\" se agregó a tu lista de deseos.",
-            "Producto agregado",
-            JOptionPane.INFORMATION_MESSAGE
-        );
+        return true; // Se agregó exitosamente
     }
-    
     // Eliminar producto específico de deseos
     public boolean eliminarDeDeseos(int idProducto) {
         boolean eliminado = deseos.eliminar(idProducto);

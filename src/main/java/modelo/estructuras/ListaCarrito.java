@@ -100,4 +100,16 @@ public class ListaCarrito {
         inicio = null;
         tamaño = 0;
     }
+    
+    // Buscar producto por ID
+    public ItemCarrito buscarProducto(int idProducto) {
+        NodoItemCarrito actual = inicio;
+        while (actual != null) {
+            if (actual.item.getProducto().getId() == idProducto) {
+                return actual.item;
+            }
+                actual = actual.siguiente;
+        }
+        return null;
+    }
 }

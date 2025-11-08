@@ -73,17 +73,12 @@ public class SubPanelHistorial extends javax.swing.JPanel {
             lblVacio.setForeground(new java.awt.Color(150, 150, 150));
             lblVacio.setAlignmentX(javax.swing.JComponent.CENTER_ALIGNMENT);
             
-            javax.swing.JLabel lblEmoji = new javax.swing.JLabel("📜");
-            lblEmoji.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 80));
-            lblEmoji.setAlignmentX(javax.swing.JComponent.CENTER_ALIGNMENT);
-            
             javax.swing.JLabel lblMensaje = new javax.swing.JLabel("Tu historial de compras aparecerá aquí");
             lblMensaje.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 14));
             lblMensaje.setForeground(new java.awt.Color(120, 120, 120));
             lblMensaje.setAlignmentX(javax.swing.JComponent.CENTER_ALIGNMENT);
             
             panelHistorial.add(javax.swing.Box.createVerticalGlue());
-            panelHistorial.add(lblEmoji);
             panelHistorial.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 20)));
             panelHistorial.add(lblVacio);
             panelHistorial.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 10)));
@@ -126,7 +121,7 @@ public class SubPanelHistorial extends javax.swing.JPanel {
         
         // Label de fecha y número
         javax.swing.JLabel lblFecha = new javax.swing.JLabel(
-            String.format("📅 Compra #%d - %s", numeroCompra, formatearFecha(compra.getFecha()))
+            String.format("Compra #%d - %s", numeroCompra, formatearFecha(compra.getFecha()))
         );
         lblFecha.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 16));
         lblFecha.setForeground(new java.awt.Color(50, 50, 50));
@@ -281,20 +276,6 @@ public class SubPanelHistorial extends javax.swing.JPanel {
     }
     
     private String obtenerEmojiPorCategoria(String categoria) {
-        switch (categoria.toLowerCase()) {
-            case "tecnologia":
-            case "tecnología":
-                return "📱";
-            case "hogar":
-                return "🏠";
-            case "ropa":
-                return "👕";
-            case "alimentos":
-                return "🍔";
-            case "deportes":
-                return "⚽";
-            default:
-                return "📦";
-        }
+        return "Sin imagen disponible";
     }
 }

@@ -65,6 +65,11 @@ public class CarritoManager {
         guardarCarritoEnArchivo();
     }
     
+    // Verificar si un producto ya existe en el carrito
+    public boolean productoExisteEnCarrito(int idProducto) {
+        return carrito.buscarProducto(idProducto) != null;
+    }
+    
     // Cargar carrito desde archivo
     private void cargarCarritoDeArchivo() {
         if (!GestorArchivos.archivoExiste(archivoCarrito)) {

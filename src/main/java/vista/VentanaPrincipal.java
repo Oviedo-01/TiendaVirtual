@@ -4,6 +4,8 @@
  */
 package vista;
 
+
+
 /**
  *
  * @author estra
@@ -21,7 +23,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     
     
     public VentanaPrincipal() {
+
         initComponents();
+        
         
         //inicializar managers
         this.productoManager = new modelo.gestores.ProductoManager();

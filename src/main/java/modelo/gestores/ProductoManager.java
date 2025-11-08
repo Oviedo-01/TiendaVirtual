@@ -45,12 +45,12 @@ public class ProductoManager {
     
     // Cargar productos desde archivo
     public void cargarProductosDeArchivo() {
-        // Si el archivo no existe, crearlo con productos de ejemplo
+        // Si el archivo no existe, crearlo vacío
         if (!GestorArchivos.archivoExiste(ARCHIVO_PRODUCTOS)) {
-            crearCatalogoInicial();
+            GestorArchivos.crearArchivo(ARCHIVO_PRODUCTOS);
             return;
         }
-        
+    
         List<String> lineas = GestorArchivos.leerArchivo(ARCHIVO_PRODUCTOS);
         for (String linea : lineas) {
             Producto producto = Producto.fromString(linea);
@@ -69,48 +69,4 @@ public class ProductoManager {
         GestorArchivos.escribirArchivo(ARCHIVO_PRODUCTOS, lineas);
     }
     
-    // Crear catálogo inicial con productos de ejemplo
-    private void crearCatalogoInicial() {
-        GestorArchivos.crearArchivo(ARCHIVO_PRODUCTOS);
-        
-        // Productos de tecnología
-        Producto p1 = new Producto(1, "Smartphone Galaxy", 299.99, "Teléfono inteligente con pantalla AMOLED", 15, "Tecnologia");
-        p1.agregarImagen("imagenes/smartphone1.jpg");
-        p1.agregarImagen("imagenes/smartphone2.jpg");
-        productos.agregarProducto(p1);
-        
-        Producto p2 = new Producto(2, "Laptop Premium", 899.99, "Laptop ultradelgada con SSD 512GB", 8, "Tecnologia");
-        p2.agregarImagen("imagenes/laptop1.jpg");
-        p2.agregarImagen("imagenes/laptop2.jpg");
-        productos.agregarProducto(p2);
-        
-        Producto p3 = new Producto(3, "Smartwatch Pro", 199.99, "Reloj inteligente con monitoreo de salud", 20, "Tecnologia");
-        p3.agregarImagen("imagenes/smartwatch1.jpg");
-        productos.agregarProducto(p3);
-        
-        Producto p4 = new Producto(4, "Auriculares Bluetooth", 149.99, "Auriculares con cancelación de ruido", 25, "Tecnologia");
-        p4.agregarImagen("imagenes/auriculares1.jpg");
-        productos.agregarProducto(p4);
-        
-        Producto p5 = new Producto(5, "Cámara Digital 4K", 599.99, "Cámara profesional con grabación 4K", 10, "Tecnologia");
-        p5.agregarImagen("imagenes/camara1.jpg");
-        p5.agregarImagen("imagenes/camara2.jpg");
-        p5.agregarImagen("imagenes/camara3.jpg");
-        productos.agregarProducto(p5);
-        
-        Producto p6 = new Producto(6, "Monitor 4K 27 pulgadas", 399.99, "Monitor para gaming y diseño", 12, "Tecnologia");
-        p6.agregarImagen("imagenes/monitor1.jpg");
-        productos.agregarProducto(p6);
-        
-        // Productos de hogar
-        Producto p7 = new Producto(7, "Cafetera Automática", 89.99, "Cafetera programable con molinillo", 18, "Hogar");
-        p7.agregarImagen("imagenes/cafetera1.jpg");
-        productos.agregarProducto(p7);
-        
-        Producto p8 = new Producto(8, "Aspiradora Robot", 249.99, "Robot aspirador inteligente", 14, "Hogar");
-        p8.agregarImagen("imagenes/aspiradora1.jpg");
-        productos.agregarProducto(p8);
-        
-        guardarProductosEnArchivo();
-    }
 }

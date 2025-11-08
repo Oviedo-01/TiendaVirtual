@@ -259,7 +259,7 @@ public class SubPanelCatalogo extends javax.swing.JPanel {
         panel.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         // Botón Agregar al Carrito
-        javax.swing.JButton btnCarrito = new javax.swing.JButton("🛒 Agregar al Carrito");
+        javax.swing.JButton btnCarrito = new javax.swing.JButton("Agregar al Carrito");
         btnCarrito.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 12));
         btnCarrito.setBackground(new java.awt.Color(102, 126, 234));
         btnCarrito.setForeground(java.awt.Color.WHITE);
@@ -269,7 +269,7 @@ public class SubPanelCatalogo extends javax.swing.JPanel {
         btnCarrito.addActionListener(e -> agregarAlCarrito(producto));
         
         // Botón Agregar a Deseos
-        javax.swing.JButton btnDeseos = new javax.swing.JButton("❤️ Agregar a Deseos");
+        javax.swing.JButton btnDeseos = new javax.swing.JButton("Agregar a Deseos");
         btnDeseos.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 12));
         btnDeseos.setBackground(new java.awt.Color(255, 140, 0));
         btnDeseos.setForeground(java.awt.Color.WHITE);
@@ -279,7 +279,7 @@ public class SubPanelCatalogo extends javax.swing.JPanel {
         btnDeseos.addActionListener(e -> agregarADeseos(producto));
         
         // Botón Ver Detalles
-        javax.swing.JButton btnDetalles = new javax.swing.JButton("ℹ️ Ver Detalles");
+        javax.swing.JButton btnDetalles = new javax.swing.JButton("Ver Detalles");
         btnDetalles.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11));
         btnDetalles.setBackground(new java.awt.Color(158, 158, 158));
         btnDetalles.setForeground(java.awt.Color.WHITE);
@@ -308,7 +308,16 @@ public class SubPanelCatalogo extends javax.swing.JPanel {
                 javax.swing.JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
+    
+        // Verificar si el producto ya está en el carrito
+        if (carritoManager.productoExisteEnCarrito(producto.getId())) {
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                "Este producto ya está en tu carrito", 
+                "Aviso", 
+                javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            return;
+        } 
+    
         carritoManager.agregarAlCarrito(producto, 1);
         javax.swing.JOptionPane.showMessageDialog(this, 
             producto.getNombre() + " agregado al carrito", 
@@ -317,11 +326,19 @@ public class SubPanelCatalogo extends javax.swing.JPanel {
     }
     
     private void agregarADeseos(modelo.entidades.Producto producto) {
-        deseosManager.agregarADeseos(producto);
-        javax.swing.JOptionPane.showMessageDialog(this, 
-            producto.getNombre() + " agregado a tu lista de deseos", 
-            "Éxito", 
-            javax.swing.JOptionPane.INFORMATION_MESSAGE);
+    
+        boolean agregado = deseosManager.agregarADeseos(producto);
+        if (agregado) {
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                producto.getNombre() + " agregado a tu lista de deseos", 
+                "Éxito", 
+                javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        } else {
+             javax.swing.JOptionPane.showMessageDialog(this, 
+                 "Este producto ya está en tu lista de deseos", 
+                 "Aviso", 
+                 javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        }
     }
     
     private void mostrarDetallesProducto(modelo.entidades.Producto producto) {
@@ -330,12 +347,17 @@ public class SubPanelCatalogo extends javax.swing.JPanel {
         dialogo.setSize(600, 450);
         dialogo.setLocationRelativeTo(this);
         dialogo.setLayout(new java.awt.BorderLayout(15, 15));
-        
+    
         // Panel principal con padding
         javax.swing.JPanel panelPrincipal = new javax.swing.JPanel(new java.awt.BorderLayout(15, 15));
         panelPrincipal.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
         panelPrincipal.setBackground(java.awt.Color.WHITE);
-        
+    
+        // Panel izquierdo: Imagen con navegación
+        javax.swing.JPanel panelImagenContenedor = new javax.swing.JPanel(new java.awt.BorderLayout());
+        panelImagenContenedor.setBackground(java.awt.Color.WHITE);
+        panelImagenContenedor.setPreferredSize(new java.awt.Dimension(200, 250));
+    
         // Imagen grande
         javax.swing.JLabel lblImagenGrande = new javax.swing.JLabel();
         lblImagenGrande.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -343,45 +365,81 @@ public class SubPanelCatalogo extends javax.swing.JPanel {
         lblImagenGrande.setBackground(new java.awt.Color(240, 240, 250));
         lblImagenGrande.setPreferredSize(new java.awt.Dimension(200, 200));
         lblImagenGrande.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200), 2));
-        
-        // ✅ CARGAR IMAGEN REAL
-        try {
-            String rutaImagen = producto.getImagenActual();
-            java.io.File archivoImagen = new java.io.File(rutaImagen);
     
-            if (archivoImagen.exists()) {
-                javax.swing.ImageIcon iconoOriginal = new javax.swing.ImageIcon(rutaImagen);
-                java.awt.Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(
-                    190, 190, java.awt.Image.SCALE_SMOOTH
-                );
-                lblImagenGrande.setIcon(new javax.swing.ImageIcon(imagenEscalada));
-            } else {
-                lblImagenGrande.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 100));
-                lblImagenGrande.setText(obtenerEmojiPorCategoria(producto.getCategoria()));
+        // Método para cargar la imagen actual
+        Runnable cargarImagen = () -> {
+            try {
+                String rutaImagen = producto.getImagenActual();
+                java.io.File archivoImagen = new java.io.File(rutaImagen);
+            
+                if (archivoImagen.exists()) {
+                   javax.swing.ImageIcon iconoOriginal = new javax.swing.ImageIcon(rutaImagen);
+                   java.awt.Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(
+                       190, 190, java.awt.Image.SCALE_SMOOTH
+                   );
+                   lblImagenGrande.setIcon(new javax.swing.ImageIcon(imagenEscalada));
+                   lblImagenGrande.setText("");
+                } else {
+                    lblImagenGrande.setIcon(null);
+                    lblImagenGrande.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 60));
+                    lblImagenGrande.setText("Sin imagen");
+                }
+            } catch (Exception e) {
+                lblImagenGrande.setIcon(null);
+                lblImagenGrande.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 60));
+                lblImagenGrande.setText("Error");
             }
-        } catch (Exception e) {
-            lblImagenGrande.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 100));
-            lblImagenGrande.setText(obtenerEmojiPorCategoria(producto.getCategoria()));
-        }
+        };
+    
+        // Cargar imagen inicial
+        cargarImagen.run();
+    
+        panelImagenContenedor.add(lblImagenGrande, java.awt.BorderLayout.CENTER);
+    
+        // Botones de navegación de imágenes (si tiene múltiples)
+        if (producto.getListaImagenes().getTamaño() > 1) {
+            javax.swing.JPanel panelNavegacion = new javax.swing.JPanel(new java.awt.FlowLayout());
+            panelNavegacion.setBackground(java.awt.Color.WHITE);
         
+            javax.swing.JButton btnAnterior = new javax.swing.JButton("Anterior");
+            btnAnterior.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 12));
+            btnAnterior.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            btnAnterior.addActionListener(e -> {
+              producto.anteriorImagen();
+              cargarImagen.run();
+            });
+        
+            javax.swing.JButton btnSiguiente = new javax.swing.JButton("Siguiente");
+            btnSiguiente.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 12));
+            btnSiguiente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            btnSiguiente.addActionListener(e -> {
+                producto.siguienteImagen();
+                cargarImagen.run();
+            });
+        
+            panelNavegacion.add(btnAnterior);
+            panelNavegacion.add(btnSiguiente);
+            panelImagenContenedor.add(panelNavegacion, java.awt.BorderLayout.SOUTH);
+        }
+     
         // Información detallada
         javax.swing.JPanel panelInfo = new javax.swing.JPanel();
         panelInfo.setLayout(new javax.swing.BoxLayout(panelInfo, javax.swing.BoxLayout.Y_AXIS));
         panelInfo.setBackground(java.awt.Color.WHITE);
-        
+    
         javax.swing.JLabel lblNombreDetalle = new javax.swing.JLabel(producto.getNombre());
         lblNombreDetalle.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 22));
-        
+    
         javax.swing.JLabel lblPrecioDetalle = new javax.swing.JLabel(String.format("Precio: $%.2f", producto.getPrecio()));
         lblPrecioDetalle.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 18));
         lblPrecioDetalle.setForeground(new java.awt.Color(102, 126, 234));
-        
-        javax.swing.JLabel lblCategoriaDetalle = new javax.swing.JLabel("Categoría: " + producto.getCategoria());
+    
+        javax.swing.JLabel lblCategoriaDetalle = new javax.swing.JLabel("Categoria: " + producto.getCategoria());
         lblCategoriaDetalle.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 14));
-        
+    
         javax.swing.JLabel lblStockDetalle = new javax.swing.JLabel("Disponibles: " + producto.getStock() + " unidades");
         lblStockDetalle.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 14));
-        
+    
         javax.swing.JTextArea txtDescripcionDetalle = new javax.swing.JTextArea(producto.getDescripcion());
         txtDescripcionDetalle.setEditable(false);
         txtDescripcionDetalle.setLineWrap(true);
@@ -390,7 +448,7 @@ public class SubPanelCatalogo extends javax.swing.JPanel {
         txtDescripcionDetalle.setBackground(java.awt.Color.WHITE);
         javax.swing.JScrollPane scrollDescripcion = new javax.swing.JScrollPane(txtDescripcionDetalle);
         scrollDescripcion.setPreferredSize(new java.awt.Dimension(350, 100));
-        
+    
         panelInfo.add(lblNombreDetalle);
         panelInfo.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 10)));
         panelInfo.add(lblPrecioDetalle);
@@ -399,23 +457,23 @@ public class SubPanelCatalogo extends javax.swing.JPanel {
         panelInfo.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 5)));
         panelInfo.add(lblStockDetalle);
         panelInfo.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 15)));
-        panelInfo.add(new javax.swing.JLabel("Descripción:"));
+        panelInfo.add(new javax.swing.JLabel("Descripcion:"));
         panelInfo.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 5)));
         panelInfo.add(scrollDescripcion);
-        
+    
         // Botón cerrar
         javax.swing.JButton btnCerrar = new javax.swing.JButton("Cerrar");
         btnCerrar.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14));
         btnCerrar.addActionListener(e -> dialogo.dispose());
-        
+    
         javax.swing.JPanel panelBoton = new javax.swing.JPanel();
         panelBoton.setBackground(java.awt.Color.WHITE);
         panelBoton.add(btnCerrar);
-        
-        panelPrincipal.add(lblImagenGrande, java.awt.BorderLayout.WEST);
+    
+        panelPrincipal.add(panelImagenContenedor, java.awt.BorderLayout.WEST);
         panelPrincipal.add(panelInfo, java.awt.BorderLayout.CENTER);
         panelPrincipal.add(panelBoton, java.awt.BorderLayout.SOUTH);
-        
+      
         dialogo.add(panelPrincipal);
         dialogo.setVisible(true);
     }

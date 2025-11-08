@@ -97,4 +97,16 @@ public class PilaDeseos {
     public int getTamaño() {
         return tamaño;
     }
+    
+    // Verificar si un producto ya existe en la pila
+    public boolean existe(int idProducto) {
+        NodoProducto actual = tope;
+        while (actual != null) {
+            if (actual.producto.getId() == idProducto) {
+                return true;
+            }
+            actual = actual.siguiente;
+        }
+        return false;
+    }
 }
