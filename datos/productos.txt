@@ -1,1 +1,1 @@
-1|Zapatos Air|100.0|Zapatos originales de la marca Nike|5|Zapatos|imagenes/prueba_01.jpg;imagenes/prueba_03.jpg
+1|Zapatos Air|100.0|Zapatos de suela ergonomica.|50|Zapatos|C:\Users\estra\OneDrive\Documentos\NetBeansProjects\TiendaVirtual\imagenes\prueba_01.jpg;C:\Users\estra\OneDrive\Documentos\NetBeansProjects\TiendaVirtual\imagenes\prueba_02.jfif

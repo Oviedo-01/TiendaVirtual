@@ -69,4 +69,13 @@ public class ProductoManager {
         GestorArchivos.escribirArchivo(ARCHIVO_PRODUCTOS, lineas);
     }
     
+    // Eliminar producto por ID
+    public boolean eliminarProducto(int id) {
+        boolean eliminado = productos.eliminarProducto(id);
+        if (eliminado) {
+            guardarProductosEnArchivo();
+        }
+        return eliminado;
+    }
+    
 }

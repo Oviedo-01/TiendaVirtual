@@ -50,6 +50,32 @@ public class ListaProductos {
         return null;
     }
     
+    // Eliminar producto por ID
+    public boolean eliminarProducto(int id) {
+        if (inicio == null) {
+            return false;
+        }
+    
+       // Si está al inicio
+       if (inicio.producto.getId() == id) {
+           inicio = inicio.siguiente;
+           tamaño--;
+           return true;
+        }
+    
+        // Buscar en el resto de la lista
+        NodoProducto actual = inicio;
+        while (actual.siguiente != null) {
+            if (actual.siguiente.producto.getId() == id) {
+                actual.siguiente = actual.siguiente.siguiente;
+                tamaño--;
+                return true;
+            } 
+            actual = actual.siguiente;
+        }
+    
+        return false;
+    }
     // Obtener productos por categoría (para productos similares)
     public List<Producto> obtenerPorCategoria(String categoria) {
         List<Producto> productos = new ArrayList<>();

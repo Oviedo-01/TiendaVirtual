@@ -191,43 +191,19 @@ public class PanelAdmin extends javax.swing.JPanel {
     }
 
     private void mostrarGestionProductos() {
-        // TODO: Crear SubPanelGestionProductos
-        javax.swing.JLabel lblTemp = new javax.swing.JLabel("Gestion de Productos - Proximamente");
-        lblTemp.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 20));
-        lblTemp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        javax.swing.JPanel panelTemp = new javax.swing.JPanel(new java.awt.BorderLayout());
-        panelTemp.add(lblTemp, java.awt.BorderLayout.CENTER);
-        mostrarSubPanel(panelTemp);
+        mostrarSubPanel(new SubPanelGestionProductos(this, productoManager));
     }
 
     private void mostrarVerUsuarios() {
-        // TODO: Crear SubPanelUsuarios
-        javax.swing.JLabel lblTemp = new javax.swing.JLabel("Lista de Usuarios - Proximamente");
-        lblTemp.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 20));
-        lblTemp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        javax.swing.JPanel panelTemp = new javax.swing.JPanel(new java.awt.BorderLayout());
-        panelTemp.add(lblTemp, java.awt.BorderLayout.CENTER);
-        mostrarSubPanel(panelTemp);
+        mostrarSubPanel(new SubPanelUsuarios(this, usuarioManager));
     }
 
     private void mostrarHistorialGlobal() {
-        // TODO: Crear SubPanelHistorialGlobal
-        javax.swing.JLabel lblTemp = new javax.swing.JLabel("Historial Global - Proximamente");
-        lblTemp.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 20));
-        lblTemp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        javax.swing.JPanel panelTemp = new javax.swing.JPanel(new java.awt.BorderLayout());
-        panelTemp.add(lblTemp, java.awt.BorderLayout.CENTER);
-        mostrarSubPanel(panelTemp);
+        mostrarSubPanel(new SubPanelHistorialGlobal(this, usuarioManager, productoManager));
     }
 
     private void mostrarEstadisticas() {
-        // TODO: Crear SubPanelEstadisticas
-        javax.swing.JLabel lblTemp = new javax.swing.JLabel("Estadisticas - Proximamente");
-        lblTemp.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 20));
-        lblTemp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        javax.swing.JPanel panelTemp = new javax.swing.JPanel(new java.awt.BorderLayout());
-        panelTemp.add(lblTemp, java.awt.BorderLayout.CENTER);
-        mostrarSubPanel(panelTemp);
+        mostrarSubPanel(new SubPanelEstadisticas(this, usuarioManager, productoManager));
     }
 
     // ========== GETTERS ==========
